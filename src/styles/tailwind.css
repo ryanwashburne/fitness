@@ -1,0 +1,26 @@
+@tailwind base;
+
+body {
+  @apply bg-gray-900;
+  @apply text-white;
+}
+
+@tailwind components;
+
+.btn {
+  @apply px-3;
+  @apply py-2;
+  @apply rounded;
+  @apply transition;
+  @apply duration-200;
+  @apply border;
+}
+.btn:hover {
+  @apply bg-gray-800;
+}
+.btn:disabled {
+  @apply opacity-50;
+  @apply cursor-not-allowed;
+}
+
+@tailwind utilities;
