@@ -4,14 +4,11 @@ import './index.css'
 import App from './App'
 import * as serviceWorker from './serviceWorker'
 import { IdentityContextProvider } from 'react-netlify-identity-widget'
-import { StateProvider } from './hooks/useContext'
 
 ReactDOM.render(
   <React.StrictMode>
-    <IdentityContextProvider url="https://washburne-fitness.netlify.app">
-      <StateProvider>
-        <App />
-      </StateProvider>
+    <IdentityContextProvider url="https://fitness.washburne.dev">
+      <App />
     </IdentityContextProvider>
   </React.StrictMode>,
   document.getElementById('root'),

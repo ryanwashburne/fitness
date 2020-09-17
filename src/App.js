@@ -5,40 +5,18 @@ import {
 } from 'react-netlify-identity-widget'
 import 'react-netlify-identity-widget/styles.css'
 import '@reach/tabs/styles.css'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom'
 
-// import { useContext } from './hooks/useContext'
-// import { WEEK_1, WEEK_2, WEEK_3 } from './utils/constants'
+import { HomePage, ProfilePage } from './pages'
 
-const Home = () => {
-  const { logoutUser } = useIdentityContext()
-  // const { data, setData, slide } = useContext()
-  // async function initialize() {
-  //   const response = await fetch('/.netlify/functions/loadData')
-  //   const data = await response.json()
-  //   setData(data.payload)
-  // }
-  // useEffect(() => {
-  //   initialize()
-  // }, [])
-  return (
-    <div>
-      <p>Home</p>
-      <button
-        className="btn bg-red-500"
-        onClick={async () => await logoutUser()}
-      >
-        Log out
-      </button>
-    </div>
-  )
-}
-
-export default () => {
+const Auth = () => {
   const [dialog, setDialog] = useState(false)
-  const { isLoggedIn } = useIdentityContext()
-  return isLoggedIn ? (
-    <Home />
-  ) : (
+  return (
     <div className="h-screen flex flex-col justify-center items-center">
       <button className="btn" onClick={() => setDialog(true)}>
         Log in
@@ -48,5 +26,26 @@ export default () => {
         onCloseDialog={() => setDialog(false)}
       />
     </div>
+  )
+}
+
+const AuthRoute = ({ component, publicComponent, ...props }) => {
+  const { isLoggedIn } = useIdentityContext()
+  if (!isLoggedIn && !publicComponent) {
+    return <Redirect to="/" />
+  }
+  return (
+    <Route component={isLoggedIn ? component : publicComponent} {...props} />
+  )
+}
+
+export default () => {
+  return (
+    <Router>
+      <Switch>
+        <AuthRoute exact path="/" component={HomePage} publicComponent={Auth} />
+        <AuthRoute exact path="/profile" component={ProfilePage} />
+      </Switch>
+    </Router>
   )
 }
