@@ -22,7 +22,7 @@ const Form = ({ initial, updateUser }) => {
               {key}
             </label>
             <input
-              className="bg-gray-800"
+              className="form-input bg-gray-800"
               name={key}
               value={value}
               onChange={(e) => setFields({ ...fields, [key]: e.target.value })}
@@ -37,48 +37,14 @@ const Form = ({ initial, updateUser }) => {
   )
 }
 
-const Dashboard = ({ data }) => {
-  return (
-    <div>
-      <div className="mb-8">
-        <p className="text-xl">1 Rep Max</p>
-        <hr className="my-4" />
-        {Object.keys(data).map((key, i) => {
-          const value = data[key]
-          return (
-            <div key={i}>
-              <p>
-                {key}: {value}
-              </p>
-            </div>
-          )
-        })}
-      </div>
-      <div className="mb-8">
-        <p className="text-xl">Training Max</p>
-        <hr className="my-4" />
-        {Object.keys(data).map((key, i) => {
-          const value = data[key]
-          return (
-            <div key={i}>
-              <p>
-                {key}: {Number(value) * 0.9}
-              </p>
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-}
-
 export default () => {
-  // const [editing, setEditing] = useState(false)
-
   const {
     user: { user_metadata },
     updateUser,
   } = useIdentityContext()
+
+  const [userData, setUserData] = useState(user_metadata?.info)
+  const [editing, setEditing] = useState(false)
 
   async function handleInfo(info) {
     await updateUser({
@@ -88,16 +54,58 @@ export default () => {
     })
     window.location.reload()
   }
+
+  const Dashboard = () => {
+    return (
+      <div>
+        <div className="mb-8">
+          <p className="text-xl">1 Rep Max</p>
+          <hr className="my-4" />
+          {Object.keys(userData).map((key, i) => {
+            const value = userData[key]
+            return (
+              <div key={i} className="mb-2">
+                <label htmlFor={key} className="text-xs block">
+                  {key}
+                </label>
+                <input
+                  className="form-input bg-gray-800"
+                  name={key}
+                  value={value}
+                  disabled
+                />
+              </div>
+            )
+          })}
+        </div>
+        <div className="mb-8">
+          <p className="text-xl">Training Max</p>
+          <hr className="my-4" />
+          {Object.keys(userData).map((key, i) => {
+            const value = userData[key]
+            return (
+              <div key={i}>
+                <p>
+                  {key}: {Number(value) * 0.9}
+                </p>
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Layout title="Profile">
-      {user_metadata?.info ? (
+      {userData ? (
         <div>
           <Dashboard data={user_metadata.info} />
-          {/* <div>
+          <div>
             <button className="btn" onClick={() => setEditing(!editing)}>
               {editing ? 'Save Data' : 'Edit Data'}
             </button>
-          </div> */}
+          </div>
           <div>
             <button className="mt-8 btn" onClick={() => handleInfo(null)}>
               Clear ALL Data
@@ -108,7 +116,7 @@ export default () => {
         <div>
           <Form
             initial={
-              user_metadata?.info ||
+              userData ||
               EXCERCISES.reduce((prev, curr) => {
                 prev[curr] = 0
                 return prev

@@ -7,7 +7,7 @@ export default ({ title, children }) => {
   const { logoutUser } = useIdentityContext()
   return (
     <div className="min-h-screen">
-      <header className="container mx-auto bg-gray-800">
+      <header className="bg-gray-800">
         <nav className="flex items-center">
           <Link to="/" className="p-4 hover:bg-gray-700">
             Home
@@ -24,7 +24,7 @@ export default ({ title, children }) => {
           </button>
         </nav>
       </header>
-      <main className="container mx-auto mt-8 px-4 md:px-0">
+      <main className="px-4 md:px-12 mt-8 px-4 md:px-0">
         {title && (
           <h1 className="text-2xl md:text-5xl font-bold mb-4 md:mb-8">
             {title}

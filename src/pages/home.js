@@ -1,85 +1,58 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useIdentityContext } from 'react-netlify-identity'
 
 import Layout from '../components/layout'
+import Week from '../components/week'
 import { WEEKS, DAYS } from '../utils/constants'
-import { rounded } from '../utils/helpers'
 
 export default () => {
   const {
     user: { user_metadata },
   } = useIdentityContext()
+  const [selectedWeek, setWeek] = useState(-1)
+  const [selectedDay, setDay] = useState(-1)
 
   return (
     <Layout title="Home">
-      {user_metadata?.info ? (
-        <div>
-          {WEEKS.map((week, i) => {
+      <div className="mb-16">
+        <select
+          className="form-select text-black"
+          value={selectedWeek}
+          onChange={(e) => setWeek(Number(e.target.value))}
+        >
+          <option value={-1}>All Weeks</option>
+          {WEEKS.map((_, i) => {
             return (
-              <div key={i} className="mb-16">
-                <p className="text-xl mb-8">Week {i + 1}</p>
-                <div className="grid md:grid-cols-3 gap-8">
-                  {DAYS.map((excercises, j) => {
-                    return (
-                      <div
-                        key={j}
-                        className="rounded-lg bg-gray-400 text-black p-6"
-                      >
-                        <p className="text-xl mb-8">Day {j + 1}</p>
-                        {excercises.map((ex, k) => {
-                          return (
-                            <div key={k} className="text-center mb-12">
-                              <p className="italic mb-8">{ex}</p>
-                              <table className="table-auto w-full">
-                                <thead>
-                                  <tr>
-                                    <th className="px-4">%</th>
-                                    <th className="px-4">Weight</th>
-                                    <th className="px-4">Sets</th>
-                                    <th className="px-4">Reps</th>
-                                    <th className="px-4">Side</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="text-white">
-                                  {week.map(({ percentage, sets, reps }, i) => {
-                                    const weight =
-                                      Number(user_metadata.info[ex]) *
-                                      0.9 *
-                                      percentage *
-                                      0.01
-                                    return (
-                                      <tr
-                                        className={`group hover:bg-yellow-800 bg-gray-${
-                                          i % 2 === 0 ? 9 : 8
-                                        }00`}
-                                        key={i}
-                                      >
-                                        <td className="p-4 border">
-                                          {percentage}%
-                                        </td>
-                                        <td className="p-4 border">
-                                          {rounded(weight, 2.5)}
-                                        </td>
-                                        <td className="p-4 border">{sets}</td>
-                                        <td className="p-4 border">{reps}</td>
-                                        <td className="group-hover:bg-yellow-600 p-4 border">
-                                          {rounded((weight - 15) / 2, 5)}
-                                        </td>
-                                      </tr>
-                                    )
-                                  })}
-                                </tbody>
-                              </table>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
+              <option value={i} key={i}>
+                Week {i + 1}
+              </option>
             )
           })}
+        </select>
+        <select
+          className="form-select text-black"
+          value={selectedDay}
+          onChange={(e) => setDay(Number(e.target.value))}
+        >
+          <option value={-1}>All Days</option>
+          {DAYS.map((_, i) => {
+            return (
+              <option value={i} key={i}>
+                Day {i + 1}
+              </option>
+            )
+          })}
+        </select>
+      </div>
+      {user_metadata?.info ? (
+        <div>
+          {selectedWeek === -1 ? (
+            WEEKS.map((_, i) => {
+              return <Week key={i} weekNumber={i} dayNumber={selectedDay} />
+            })
+          ) : (
+            <Week weekNumber={selectedWeek} dayNumber={selectedDay} />
+          )}
         </div>
       ) : (
         <p>Data not added to profile</p>

@@ -3,8 +3,9 @@ export const EXCERCISES = ['Squat', 'Bench', 'Deadlift', 'Shoulder Press']
 export const DAY_1 = [EXCERCISES[0], [EXCERCISES[1]]]
 export const DAY_2 = [EXCERCISES[2], EXCERCISES[3]]
 export const DAY_3 = [EXCERCISES[1], [EXCERCISES[0]]]
+export const DAY_4 = [EXCERCISES[3], EXCERCISES[2]]
 
-export const DAYS = [DAY_1, DAY_2, DAY_3]
+export const DAYS = [DAY_1, DAY_2, DAY_3, DAY_4]
 
 const WEEK_1 = [
   { percentage: 40, sets: 1, reps: 5 },
