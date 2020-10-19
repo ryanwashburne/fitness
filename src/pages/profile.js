@@ -43,7 +43,7 @@ export default () => {
     updateUser,
   } = useIdentityContext()
 
-  const [userData, setUserData] = useState(user_metadata?.info)
+  const [userData, _] = useState(user_metadata?.info)
   const [editing, setEditing] = useState(false)
 
   async function handleInfo(info) {
