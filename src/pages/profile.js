@@ -43,8 +43,8 @@ export default () => {
     updateUser,
   } = useIdentityContext()
 
-  const [userData, _] = useState(user_metadata?.info)
-  const [editing, setEditing] = useState(false)
+  const [userData] = useState(user_metadata?.info)
+  // const [editing, setEditing] = useState(false)
 
   async function handleInfo(info) {
     await updateUser({
@@ -101,11 +101,11 @@ export default () => {
       {userData ? (
         <div>
           <Dashboard data={user_metadata.info} />
-          <div>
+          {/* <div>
             <button className="btn" onClick={() => setEditing(!editing)}>
               {editing ? 'Save Data' : 'Edit Data'}
             </button>
-          </div>
+          </div> */}
           <div>
             <button className="mt-8 btn" onClick={() => handleInfo(null)}>
               Clear ALL Data
