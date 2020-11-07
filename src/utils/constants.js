@@ -1,9 +1,9 @@
-export const EXCERCISES = ['Squat', 'Bench', 'Deadlift', 'Shoulder Press']
+export const EXERCISES = ['Squat', 'Bench', 'Deadlift', 'Shoulder Press']
 
-export const DAY_1 = [EXCERCISES[0], [EXCERCISES[1]]]
-export const DAY_2 = [EXCERCISES[2], EXCERCISES[3]]
-export const DAY_3 = [EXCERCISES[1], [EXCERCISES[0]]]
-export const DAY_4 = [EXCERCISES[3], EXCERCISES[2]]
+export const DAY_1 = [EXERCISES[0], [EXERCISES[1]]]
+export const DAY_2 = [EXERCISES[2], EXERCISES[3]]
+export const DAY_3 = [EXERCISES[1], [EXERCISES[0]]]
+export const DAY_4 = [EXERCISES[3], EXERCISES[2]]
 
 export const DAYS = [DAY_1, DAY_2, DAY_3, DAY_4]
 

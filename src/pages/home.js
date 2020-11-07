@@ -9,8 +9,27 @@ export default () => {
   const {
     user: { user_metadata },
   } = useIdentityContext()
-  const [selectedWeek, setWeek] = useState(-1)
-  const [selectedDay, setDay] = useState(-1)
+  const [selectedWeek, setWeek] = useState(
+    Number(window.localStorage.getItem('selected_week') || -1),
+  )
+  const [selectedDay, setDay] = useState(
+    Number(window.localStorage.getItem('selected_day') || -1),
+  )
+
+  const handleWeek = (e) => {
+    const value = Number(e.target.value)
+    window.localStorage.setItem('selected_week', value)
+    setWeek(value)
+  }
+
+  const handleDay = (e) => {
+    const value = Number(e.target.value)
+    window.localStorage.setItem('selected_day', value)
+    setDay(value)
+    console.log(value)
+  }
+
+  console.log(selectedWeek, selectedDay)
 
   return (
     <Layout title="Home">
@@ -18,7 +37,7 @@ export default () => {
         <select
           className="form-select text-black"
           value={selectedWeek}
-          onChange={(e) => setWeek(Number(e.target.value))}
+          onChange={handleWeek}
         >
           <option value={-1}>All Weeks</option>
           {WEEKS.map((_, i) => {
@@ -32,7 +51,7 @@ export default () => {
         <select
           className="form-select text-black"
           value={selectedDay}
-          onChange={(e) => setDay(Number(e.target.value))}
+          onChange={handleDay}
         >
           <option value={-1}>All Days</option>
           {DAYS.map((_, i) => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useIdentityContext } from 'react-netlify-identity'
 
 import Layout from '../components/layout'
-import { EXCERCISES } from '../utils/constants'
+import { EXERCISES } from '../utils/constants'
 
 const Form = ({ initial, updateUser }) => {
   const [fields, setFields] = useState(initial)
@@ -43,8 +43,19 @@ export default () => {
     updateUser,
   } = useIdentityContext()
 
-  const [userData] = useState(user_metadata?.info)
-  // const [editing, setEditing] = useState(false)
+  const [userData, setUserData] = useState(user_metadata?.info)
+
+  const handleChange = async (field, adding) => {
+    let num = Number(userData[field])
+    if (adding) {
+      num += 5
+    } else {
+      num -= 5
+    }
+    const newData = { ...userData, [field]: String(num) }
+    setUserData(newData)
+    await handleInfo(newData)
+  }
 
   async function handleInfo(info) {
     await updateUser({
@@ -52,7 +63,6 @@ export default () => {
         info,
       },
     })
-    window.location.reload()
   }
 
   const Dashboard = () => {
@@ -74,6 +84,18 @@ export default () => {
                   value={value}
                   disabled
                 />
+                <button
+                  className="inline btn mx-2"
+                  onClick={() => handleChange(key, true)}
+                >
+                  +5
+                </button>
+                <button
+                  className="inline btn mx-2"
+                  onClick={() => handleChange(key, false)}
+                >
+                  -5
+                </button>
               </div>
             )
           })}
@@ -117,12 +139,15 @@ export default () => {
           <Form
             initial={
               userData ||
-              EXCERCISES.reduce((prev, curr) => {
+              EXERCISES.reduce((prev, curr) => {
                 prev[curr] = 0
                 return prev
               }, {})
             }
-            updateUser={(data) => handleInfo(data)}
+            updateUser={(data) => {
+              handleInfo(data)
+              window.location.reload()
+            }}
           />
         </div>
       )}
