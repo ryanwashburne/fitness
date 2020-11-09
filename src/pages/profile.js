@@ -85,13 +85,13 @@ export default () => {
                   disabled
                 />
                 <button
-                  className="inline btn mx-2"
+                  className="inline btn ml-4"
                   onClick={() => handleChange(key, true)}
                 >
                   +5
                 </button>
                 <button
-                  className="inline btn mx-2"
+                  className="inline btn ml-4"
                   onClick={() => handleChange(key, false)}
                 >
                   -5
@@ -123,13 +123,14 @@ export default () => {
       {userData ? (
         <div>
           <Dashboard data={user_metadata.info} />
-          {/* <div>
-            <button className="btn" onClick={() => setEditing(!editing)}>
-              {editing ? 'Save Data' : 'Edit Data'}
-            </button>
-          </div> */}
           <div>
-            <button className="mt-8 btn" onClick={() => handleInfo(null)}>
+            <button
+              className="mt-8 btn"
+              onClick={async () => {
+                await handleInfo(null)
+                window.location.reload()
+              }}
+            >
               Clear ALL Data
             </button>
           </div>
@@ -144,8 +145,8 @@ export default () => {
                 return prev
               }, {})
             }
-            updateUser={(data) => {
-              handleInfo(data)
+            updateUser={async (data) => {
+              await handleInfo(data)
               window.location.reload()
             }}
           />
