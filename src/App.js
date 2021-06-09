@@ -13,6 +13,7 @@ import {
 } from 'react-router-dom'
 
 import { HomePage, ProfilePage } from './pages'
+import { StateProvider } from './utils/hooks'
 
 const Auth = () => {
   const [dialog, setDialog] = useState(false)
@@ -41,11 +42,18 @@ const AuthRoute = ({ component, publicComponent, ...props }) => {
 
 export default () => {
   return (
-    <Router>
-      <Switch>
-        <AuthRoute exact path="/" component={HomePage} publicComponent={Auth} />
-        <AuthRoute exact path="/profile" component={ProfilePage} />
-      </Switch>
-    </Router>
+    <StateProvider>
+      <Router>
+        <Switch>
+          <AuthRoute
+            exact
+            path="/"
+            component={HomePage}
+            publicComponent={Auth}
+          />
+          <AuthRoute exact path="/profile" component={ProfilePage} />
+        </Switch>
+      </Router>
+    </StateProvider>
   )
 }

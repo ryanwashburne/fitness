@@ -24,7 +24,7 @@ export default ({ title, children }) => {
           </button>
         </nav>
       </header>
-      <main className="px-4 md:px-12 mt-8 px-4 md:px-0">
+      <main className="px-4 md:px-12 mt-8 px-4 md:px-0 pb-16 md:pb-32">
         {title && (
           <h1 className="text-2xl md:text-5xl font-bold mb-4 md:mb-8">
             {title}

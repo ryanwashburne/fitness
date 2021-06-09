@@ -2,18 +2,25 @@ import React from 'react'
 import { useIdentityContext } from 'react-netlify-identity'
 
 import { rounded } from '../utils/helpers'
+import { useState } from '../utils/hooks'
+import { CUTTING } from '../utils/constants'
 
-export default ({ excercises, week, dayNumber }) => {
+export default ({ exercises, week, dayNumber }) => {
   const {
     user: { user_metadata },
   } = useIdentityContext()
+  const { selectedForm } = useState()
+  const isCutting = selectedForm === CUTTING
   return (
     <div className="rounded-lg bg-gray-400 text-black p-2">
       <p className="text-xl mb-8">Day {dayNumber + 1}</p>
-      {excercises.map((ex, k) => {
+      {exercises.map((ex, k) => {
         return (
           <div key={k} className="text-center mb-12">
-            <p className="italic mb-8">{ex}</p>
+            <p className="italic mb-8">
+              {ex}
+              {k >= 2 && ' [Random]'}
+            </p>
             <table className="table-auto w-full">
               <thead>
                 <tr>
@@ -26,6 +33,7 @@ export default ({ excercises, week, dayNumber }) => {
               </thead>
               <tbody className="text-white">
                 {week.map(({ percentage, sets, reps }, i) => {
+                  if (isCutting && i <= 2) return null
                   const weight =
                     Number(user_metadata.info[ex]) * 0.9 * percentage * 0.01
                   return (

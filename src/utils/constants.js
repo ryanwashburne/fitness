@@ -1,3 +1,6 @@
+export const BULKING = 'bulking'
+export const CUTTING = 'cutting'
+
 const SQUAT = 'Squat'
 const BENCH = 'Bench'
 const DEADLIFT = 'Deadlift'

@@ -43,29 +43,31 @@ export default () => {
     updateUser,
   } = useIdentityContext()
 
-  const [userData, setUserData] = useState(user_metadata?.info)
+  const oldData = user_metadata?.info
+  const [userData, setUserData] = useState(oldData)
+  const [disabled, setDisabled] = useState(true)
 
-  const handleChange = async (field, adding) => {
-    let num = Number(userData[field])
+  const handleChange = async (field, value, adding) => {
+    setDisabled(false)
+    let num = value
     if (adding) {
-      num += 5
-    } else {
-      num -= 5
+      num = Number(userData[field]) + value
     }
     const newData = { ...userData, [field]: String(num) }
     setUserData(newData)
-    await handleInfo(newData)
   }
 
-  async function handleInfo(info) {
+  async function saveChanges(newData) {
+    const previous = user_metadata?.prev || []
     await updateUser({
       data: {
-        info,
+        info: newData || userData,
+        prev: [oldData, ...previous],
       },
     })
   }
 
-  const Dashboard = () => {
+  const Dashboard = ({ prev }) => {
     return (
       <div>
         <div className="mb-8">
@@ -74,7 +76,11 @@ export default () => {
           {Object.keys(userData).map((key, i) => {
             const value = userData[key]
             return (
-              <div key={i} className="mb-2">
+              <form
+                key={i}
+                className="mb-2"
+                onSubmit={(e) => e.preventDefault()}
+              >
                 <label htmlFor={key} className="text-xs block">
                   {key}
                 </label>
@@ -82,23 +88,30 @@ export default () => {
                   className="form-input bg-gray-800"
                   name={key}
                   value={value}
-                  disabled
+                  onChange={(e) => handleChange(key, e.target.value)}
                 />
                 <button
                   className="inline btn ml-4"
-                  onClick={() => handleChange(key, true)}
+                  onClick={() => handleChange(key, 5, true)}
                 >
                   +5
                 </button>
                 <button
                   className="inline btn ml-4"
-                  onClick={() => handleChange(key, false)}
+                  onClick={() => handleChange(key, -5, true)}
                 >
                   -5
                 </button>
-              </div>
+              </form>
             )
           })}
+          <button
+            className="mt-2 btn"
+            onClick={() => saveChanges()}
+            disabled={disabled}
+          >
+            Save Changes
+          </button>
         </div>
         <div className="mb-8">
           <p className="text-xl">Training Max</p>
@@ -114,6 +127,24 @@ export default () => {
             )
           })}
         </div>
+
+        <div className="mb-8">
+          <p className="text-xl">Previous</p>
+          <hr className="my-4" />
+          {prev.map((stats, i) => {
+            return (
+              <p key={i} className="text-sm">
+                {Object.keys(stats).map((key, j) => {
+                  return (
+                    <span key={j} className="pr-4">
+                      <b>{key}</b>: {stats[key]}
+                    </span>
+                  )
+                })}
+              </p>
+            )
+          })}
+        </div>
       </div>
     )
   }
@@ -122,18 +153,21 @@ export default () => {
     <Layout title="Profile">
       {userData ? (
         <div>
-          <Dashboard data={user_metadata.info} />
-          <div>
+          <Dashboard
+            data={user_metadata.info}
+            prev={user_metadata?.prev || []}
+          />
+          {/* <div>
             <button
-              className="mt-8 btn"
+              className="mt-4 btn"
               onClick={async () => {
-                await handleInfo(null)
+                await saveChanges(null)
                 window.location.reload()
               }}
             >
               Clear ALL Data
             </button>
-          </div>
+          </div> */}
         </div>
       ) : (
         <div>
@@ -146,7 +180,7 @@ export default () => {
               }, {})
             }
             updateUser={async (data) => {
-              await handleInfo(data)
+              await saveChanges(data)
               window.location.reload()
             }}
           />

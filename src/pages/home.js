@@ -1,35 +1,23 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useIdentityContext } from 'react-netlify-identity'
 
 import Layout from '../components/layout'
 import Week from '../components/week'
 import { WEEKS, DAYS } from '../utils/constants'
+import { useState } from '../utils/hooks'
 
 export default () => {
   const {
     user: { user_metadata },
   } = useIdentityContext()
-  const [selectedWeek, setWeek] = useState(
-    Number(window.localStorage.getItem('selected_week') || -1),
-  )
-  const [selectedDay, setDay] = useState(
-    Number(window.localStorage.getItem('selected_day') || -1),
-  )
-
-  const handleWeek = (e) => {
-    const value = Number(e.target.value)
-    window.localStorage.setItem('selected_week', value)
-    setWeek(value)
-  }
-
-  const handleDay = (e) => {
-    const value = Number(e.target.value)
-    window.localStorage.setItem('selected_day', value)
-    setDay(value)
-    console.log(value)
-  }
-
-  console.log(selectedWeek, selectedDay)
+  const {
+    selectedWeek,
+    handleWeek,
+    selectedDay,
+    handleDay,
+    selectedForm,
+    handleForm,
+  } = useState()
 
   return (
     <Layout title="Home">
@@ -61,6 +49,14 @@ export default () => {
               </option>
             )
           })}
+        </select>
+        <select
+          className="form-select text-black"
+          value={selectedForm}
+          onChange={handleForm}
+        >
+          <option value="bulking">Bulking</option>
+          <option value="cutting">Cutting</option>
         </select>
       </div>
       {user_metadata?.info ? (
