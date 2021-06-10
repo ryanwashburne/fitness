@@ -3,14 +3,15 @@ import { useIdentityContext } from 'react-netlify-identity'
 
 import { rounded } from '../utils/helpers'
 import { useState } from '../utils/hooks'
-import { CUTTING } from '../utils/constants'
+import { CUTTING, OLYMPIC } from '../utils/constants'
 
 export default ({ exercises, week, dayNumber }) => {
   const {
     user: { user_metadata },
   } = useIdentityContext()
-  const { selectedForm } = useState()
+  const { selectedForm, selectedBar } = useState()
   const isCutting = selectedForm === CUTTING
+  const barWeight = selectedBar === OLYMPIC ? 45 : 15
   return (
     <div className="rounded-lg bg-gray-400 text-black p-2">
       <p className="text-xl mb-8">Day {dayNumber + 1}</p>
@@ -34,8 +35,11 @@ export default ({ exercises, week, dayNumber }) => {
               <tbody className="text-white">
                 {week.map(({ percentage, sets, reps }, i) => {
                   if (isCutting && i <= 2) return null
-                  const weight =
+                  let weight =
                     Number(user_metadata.info[ex]) * 0.9 * percentage * 0.01
+                  if (isCutting) {
+                    weight = weight * 0.9
+                  }
                   return (
                     <tr
                       className={`group hover:bg-yellow-800 bg-gray-${
@@ -48,7 +52,7 @@ export default ({ exercises, week, dayNumber }) => {
                       <td className="p-4 border">{sets}</td>
                       <td className="p-4 border">{reps}</td>
                       <td className="group-hover:bg-yellow-600 p-4 border">
-                        {rounded((weight - 15) / 2, 5)}
+                        {rounded((weight - barWeight) / 2, 5)}
                       </td>
                     </tr>
                   )

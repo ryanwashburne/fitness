@@ -24,7 +24,7 @@ export default ({ weekNumber, dayNumber }) => {
   return (
     <div className="mb-16">
       <p className="text-xl mb-8">Week {weekNumber + 1}</p>
-      <div className="grid md:grid-cols-4 gap-8">
+      <div className="grid xl:grid-cols-4 gap-8">
         {dayNumber === -1 ? (
           DAYS.map((exercises, i) => {
             return (

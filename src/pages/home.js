@@ -3,7 +3,14 @@ import { useIdentityContext } from 'react-netlify-identity'
 
 import Layout from '../components/layout'
 import Week from '../components/week'
-import { WEEKS, DAYS } from '../utils/constants'
+import {
+  WEEKS,
+  DAYS,
+  BULKING,
+  CUTTING,
+  OLYMPIC,
+  STANDARD,
+} from '../utils/constants'
 import { useState } from '../utils/hooks'
 
 export default () => {
@@ -17,6 +24,8 @@ export default () => {
     handleDay,
     selectedForm,
     handleForm,
+    selectedBar,
+    handleBar,
   } = useState()
 
   return (
@@ -55,8 +64,16 @@ export default () => {
           value={selectedForm}
           onChange={handleForm}
         >
-          <option value="bulking">Bulking</option>
-          <option value="cutting">Cutting</option>
+          <option value={BULKING}>Bulking</option>
+          <option value={CUTTING}>Cutting</option>
+        </select>
+        <select
+          className="form-select text-black"
+          value={selectedBar}
+          onChange={handleBar}
+        >
+          <option value={OLYMPIC}>Olympic</option>
+          <option value={STANDARD}>Standard</option>
         </select>
       </div>
       {user_metadata?.info ? (

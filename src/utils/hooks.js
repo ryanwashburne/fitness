@@ -12,6 +12,9 @@ export const StateProvider = ({ children }) => {
   const [selectedForm, setForm] = React.useState(
     window.localStorage.getItem('selected_form') || '',
   )
+  const [selectedBar, setBar] = React.useState(
+    window.localStorage.getItem('selected_bar') || '',
+  )
 
   const handleWeek = (e) => {
     const value = Number(e.target.value)
@@ -31,6 +34,12 @@ export const StateProvider = ({ children }) => {
     setForm(value)
   }
 
+  const handleBar = (e) => {
+    const value = e.target.value
+    window.localStorage.setItem('selected_bar', value)
+    setBar(value)
+  }
+
   return (
     <StateContext.Provider
       value={{
@@ -40,6 +49,8 @@ export const StateProvider = ({ children }) => {
         handleDay,
         selectedForm,
         handleForm,
+        selectedBar,
+        handleBar,
       }}
     >
       {children}
